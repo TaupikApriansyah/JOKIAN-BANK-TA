@@ -1,0 +1,2 @@
+@php($map=['aman'=>'bg-emerald-100 text-emerald-700','mendekati'=>'bg-yellow-100 text-yellow-700','terlambat'=>'bg-red-100 text-red-700','selesai'=>'bg-slate-100 text-slate-600'])
+<span class="status-chip {{ $map[$serviceCase->sla_status->value] ?? 'bg-slate-100 text-slate-700' }}">{{ $serviceCase->sla_status->label() }}@if($serviceCase->sla_status->value !== 'selesai') · {{ $serviceCase->due_at->diffForHumans() }}@endif</span>

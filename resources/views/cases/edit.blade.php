@@ -1,0 +1,4 @@
+@extends('layouts.app', ['pageTitle' => 'Ubah Berkas'])
+@section('content')
+<div class="mx-auto max-w-3xl"><div class="mb-6"><p class="font-mono text-xs font-bold text-brand-700">{{ $serviceCase->file_number }}</p><h1 class="text-2xl font-extrabold">Ubah Berkas Layanan</h1><p class="mt-1 text-sm text-slate-500">Hanya berkas baru atau menunggu dokumen yang dapat diubah.</p></div><form method="POST" action="{{ route('cases.update',$serviceCase) }}" class="app-card p-6">@csrf @method('PUT') @include('cases.partials.form',['serviceCase'=>$serviceCase])<div class="mt-7 flex justify-end gap-3"><a href="{{ route('cases.show',$serviceCase) }}" class="soft-button">Batal</a><button class="primary-pill"><i data-lucide="save" class="h-4 w-4"></i> Simpan Perubahan</button></div></form></div>
+@endsection

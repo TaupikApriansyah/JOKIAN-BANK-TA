@@ -1,0 +1,189 @@
+/*
+  Bank X Cream–Orange visual theme
+  Decorative pattern adapted from the Uiverse pattern supplied for this project.
+  It is deliberately used in branding surfaces only so tables, forms, and SLA states stay readable.
+*/
+:root {
+    --bank-cream: #fff7ed;
+    --bank-cream-strong: #fff1e6;
+    --bank-orange: #ea580c;
+    --bank-orange-bright: #f97316;
+    --bank-orange-deep: #9a3412;
+    --bank-brown: #431407;
+}
+
+.uiverse-orange-pattern {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    --u: 0.5vmin;
+    --c1: #fff1e6;
+    --c2: #ea580c;
+    --c3: #f97316;
+    --c4: #fb923c55;
+    --c5: #f9731640;
+    --c6: #fdba7440;
+
+    --draw-mid: #fff0 0 calc(var(--u) * 3.25), var(--c4) calc(var(--u) * 3.5), #fff0 calc(var(--u) * 3.75) 100%;
+    --draw-left: #fff0 0 calc(var(--u) * 3.25), var(--c5) calc(var(--u) * 3.5), #fff0 calc(var(--u) * 3.75) 100%;
+    --draw-right: #fff0 0 calc(var(--u) * 3.25), var(--c6) calc(var(--u) * 3.5), #fff0 calc(var(--u) * 3.75) 100%;
+    --draw-white: var(--c1) calc(var(--u) * 3.58) calc(var(--u) * 3.62), #fff0 calc(var(--u) * 3.66) 100%;
+    --p1: var(--c1) calc(var(--u) * 3.5), var(--c3) calc(var(--u) * 3.9), #fff0 calc(var(--u) * 4) 100%;
+    --p2: var(--c1) calc(var(--u) * 3.75), #fff0 calc(var(--u) * 4) 100%;
+    --c0: circle at 0%;
+    --c50: circle at 50%;
+    --c100: circle at 100%;
+    --gp: 50% / calc(var(--u) * 10) calc(var(--u) * 10);
+
+    background:
+        repeating-linear-gradient(90deg, #fb923c25, #f9731635 calc(var(--u) * 5), #fb923c25 calc(var(--u) * 10)),
+        radial-gradient(var(--c50) -36%, var(--p1)) var(--gp),
+        radial-gradient(var(--c100) -34%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -30%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -26%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -22%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -18%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -14%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -10%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -6%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) -2%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 2%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 6%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 8%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c100) 10%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 12%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c100) 14%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c0) -34%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -30%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -26%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -22%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -18%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -14%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -10%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -6%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) -2%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 2%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 6%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 8%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c0) 10%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 12%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c0) 14%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c100) 12%, var(--p2)) var(--gp),
+        radial-gradient(var(--c100) 15%, var(--p1)) var(--gp),
+        radial-gradient(var(--c0) 12%, var(--p2)) var(--gp),
+        radial-gradient(var(--c0) 15%, var(--p1)) var(--gp),
+        radial-gradient(var(--c50) -22%, var(--draw-mid)) var(--gp),
+        linear-gradient(180deg, #fff0 0 1%, var(--c2) 1%, var(--c1) 14%, #fff0 15% 100%) var(--gp),
+        radial-gradient(var(--c50) -18%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) -14%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) -10%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) -6%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) -2%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 2%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 6%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 10%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 14%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 18%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 22%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 26%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 30%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 34%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 38%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 42%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 46%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 36%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c50) 50%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 40%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c50) 54%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 56%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c50) 58%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 60%, var(--draw-white)) var(--gp),
+        radial-gradient(var(--c50) 62%, var(--draw-mid)) var(--gp),
+        radial-gradient(var(--c50) 61%, var(--p2)) var(--gp),
+        radial-gradient(var(--c50) 64%, var(--p1)) var(--gp),
+        radial-gradient(var(--c100) 30%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 34%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 38%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 42%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 46%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 50%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 54%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 58%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 62%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 66%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 70%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 74%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 78%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 82%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c100) 86%, var(--draw-right)) var(--gp),
+        radial-gradient(var(--c0) 30%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 34%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 38%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 42%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 46%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 50%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 54%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 58%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 62%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 66%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 70%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 74%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 78%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 82%, var(--draw-left)) var(--gp),
+        radial-gradient(var(--c0) 86%, var(--draw-left)) var(--gp),
+        linear-gradient(0deg, var(--c1) 0 30%, var(--c2) 50%, var(--c1) 50% 80%, var(--c2) calc(100% - 1px), var(--c1) calc(100% - 1px) 100%) var(--gp);
+    animation: uiversePatternDrift 22s ease-in-out infinite alternate;
+}
+
+.login-uiverse-shell .uiverse-orange-pattern { opacity: .94; }
+.login-uiverse-shell .login-pattern-wash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, rgba(255,247,237,.87) 0%, rgba(255,241,230,.46) 50%, rgba(255,247,237,.78) 100%);
+}
+.login-uiverse-shell.login-story::before { background-image: none; opacity: 0; }
+.login-uiverse-shell .login-copy,
+.login-uiverse-shell .login-features,
+.login-uiverse-shell .login-brand { z-index: 10; }
+
+.sidebar-brand-surface {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+.sidebar-brand-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: .16;
+    background:
+        linear-gradient(125deg, transparent 0 26%, #f9731626 27% 35%, transparent 36% 63%, #fb923c35 64% 72%, transparent 73%),
+        repeating-linear-gradient(90deg, #fff1e6, #fff1e6 14px, #f973161f 15px, #fff1e6 24px);
+    background-size: 140px 90px, 100% 100%;
+}
+.brand-pattern-strip {
+    height: 4px;
+    background:
+        linear-gradient(90deg, #ea580c, #f97316 35%, #fdba74 50%, #f97316 65%, #ea580c),
+        repeating-linear-gradient(90deg, transparent 0 12px, rgba(255,255,255,.32) 12px 14px);
+    background-blend-mode: screen;
+    background-size: 220% 100%, 100% 100%;
+    animation: brandStripFlow 8s linear infinite;
+}
+
+@keyframes uiversePatternDrift {
+    from { background-position: 50% 50%; transform: scale(1.01); }
+    to { background-position: 54% 46%; transform: scale(1.045); }
+}
+@keyframes brandStripFlow { to { background-position: 220% 0, 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .uiverse-orange-pattern, .brand-pattern-strip { animation: none; }
+}
+.sidebar-brand-surface::before { z-index: 0; }
+.sidebar-brand-surface > * { position: relative; z-index: 1; }

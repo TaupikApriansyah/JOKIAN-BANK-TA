@@ -1,0 +1,2 @@
+@php($map=['draft'=>'bg-slate-100 text-slate-700','menunggu_verifikasi'=>'bg-yellow-100 text-yellow-700','disetujui'=>'bg-emerald-100 text-emerald-700','dikembalikan'=>'bg-blue-100 text-blue-700','ditolak'=>'bg-red-100 text-red-700','dibatalkan'=>'bg-red-100 text-red-700','dikoreksi'=>'bg-blue-100 text-blue-700'])
+<span class="status-chip {{ $map[$transaction->status->value] ?? 'bg-slate-100 text-slate-700' }}">{{ $transaction->status->label() }}</span>

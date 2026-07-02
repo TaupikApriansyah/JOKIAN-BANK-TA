@@ -1,0 +1,302 @@
+/*
+ Bank X interaction kit
+ Adapted from the Uiverse patterns supplied for this project.
+ The original high-contrast ideas are retained, but tuned to the cream–orange
+ banking palette so dense operational data remains readable.
+*/
+:root {
+  --ux-cream: #fff7ed;
+  --ux-cream-strong: #ffedd5;
+  --ux-orange: #ea580c;
+  --ux-orange-bright: #f97316;
+  --ux-orange-deep: #7c2d12;
+  --ux-ink: #1c1917;
+  --ux-green: #17795e;
+  --ux-green-bright: #209978;
+  --ux-danger: #ff4545;
+}
+
+/* ===== 3D SUMMARY CARDS — tailored from the supplied hover card ===== */
+.app-page { perspective: 900px; }
+.app-card.bank-tilt-card,
+.app-card.dashboard-card,
+.dashboard-metric-card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform .48s cubic-bezier(.2,.8,.25,1), box-shadow .48s ease, border-color .48s ease;
+  overflow: visible;
+}
+.app-card.bank-tilt-card::after,
+.app-card.dashboard-card::after,
+.dashboard-metric-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(255,237,213,.16) 38%, rgba(234,88,12,.13));
+  transition: opacity .48s ease;
+}
+.app-card.bank-tilt-card > *,
+.app-card.dashboard-card > *,
+.dashboard-metric-card > * { position: relative; z-index: 1; transition: transform .48s ease; }
+.app-card.bank-tilt-card:hover,
+.app-card.dashboard-card:hover,
+.dashboard-metric-card:hover {
+  transform: translateZ(14px) rotateX(3deg) rotateY(-3deg) translateY(-4px);
+  border-color: #fdba74;
+  box-shadow: 15px 18px 0 rgba(124,45,18,.1), 0 20px 42px rgba(124,45,18,.14);
+}
+.app-card.bank-tilt-card:hover > *,
+.app-card.dashboard-card:hover > *,
+.dashboard-metric-card:hover > * { transform: translateZ(24px); }
+.app-card.bank-tilt-card:hover::after,
+.app-card.dashboard-card:hover::after,
+.dashboard-metric-card:hover::after { opacity: 1; }
+
+/* Fallback for summary cards that only have .app-card in existing templates. */
+.app-page > .grid > .app-card { transform-style: preserve-3d; }
+
+/* ===== PRIMARY ACTION BUTTON — bubble-reveal adapted from supplied button ===== */
+.bank-animated-button,
+.primary-pill,
+.soft-button,
+.login-submit,
+.form-action,
+main button:not(.bank-delete-button):not(.bank-download-button):not([data-uiverse-skip]) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .45s cubic-bezier(.23,1,.32,1), border-color .45s cubic-bezier(.23,1,.32,1), box-shadow .45s cubic-bezier(.23,1,.32,1), transform .2s ease !important;
+}
+.bank-animated-button::after,
+.primary-pill::after,
+.soft-button::after,
+.login-submit::after,
+.form-action::after,
+main button:not(.bank-delete-button):not(.bank-download-button):not([data-uiverse-skip])::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 50%; left: 50%;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--ux-orange);
+  opacity: 0;
+  transform: translate(-50%,-50%) scale(.1);
+  transition: transform .7s cubic-bezier(.23,1,.32,1), opacity .45s ease;
+}
+.soft-button::after { background: #fff1e6; }
+.primary-pill::after, .login-submit::after { background: var(--ux-orange-deep); }
+.bank-animated-button:hover,
+.primary-pill:hover,
+.login-submit:hover,
+.form-action:hover,
+main button:not(.bank-delete-button):not(.bank-download-button):not([data-uiverse-skip]):hover {
+  color: #fff !important;
+  border-color: var(--ux-orange) !important;
+  box-shadow: 0 0 0 5px rgba(234,88,12,.16), 0 12px 24px rgba(234,88,12,.16) !important;
+  transform: translateY(-2px);
+}
+.soft-button:hover { color: var(--ux-orange-deep) !important; }
+.bank-animated-button:hover::after,
+.primary-pill:hover::after,
+.soft-button:hover::after,
+.login-submit:hover::after,
+.form-action:hover::after,
+main button:not(.bank-delete-button):not(.bank-download-button):not([data-uiverse-skip]):hover::after {
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(16);
+}
+.bank-animated-button:active,
+.primary-pill:active,
+.soft-button:active,
+.login-submit:active,
+.form-action:active,
+main button:not(.bank-delete-button):not(.bank-download-button):not([data-uiverse-skip]):active { transform: scale(.96); }
+
+/* Keeps icons above the animated fill. */
+.bank-animated-button > *, .primary-pill > *, .soft-button > *, .login-submit > *, .form-action > * { position: relative; z-index: 1; }
+
+/* ===== DOWNLOAD ACTION — dedicated version of supplied download button ===== */
+.bank-download-button {
+  position: relative;
+  width: 156px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--ux-green);
+  border-radius: 12px;
+  background: var(--ux-green-bright);
+  overflow: hidden;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(23,121,94,.16);
+  transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.bank-download-button .button__text {
+  width: 100%;
+  transform: translateX(0);
+  padding-left: 17px;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .01em;
+  transition: all .3s ease;
+}
+.bank-download-button .button__icon {
+  position: absolute;
+  right: 0; top: 0;
+  height: 100%; width: 42px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--ux-green);
+  transition: all .3s ease;
+}
+.bank-download-button .button__icon svg { width: 19px; fill:#fff; }
+.bank-download-button:hover { background: var(--ux-green); border-color: var(--ux-green); box-shadow: 0 12px 22px rgba(23,121,94,.23); }
+.bank-download-button:hover .button__text { color: transparent; transform: translateX(-10px); }
+.bank-download-button:hover .button__icon { width: 100%; right: 0; }
+.bank-download-button:active .button__icon { background:#146c54; }
+.bank-download-button:active { border-color:#146c54; }
+.bank-download-button.compact { width: 116px; min-height: 36px; border-radius: 10px; }
+.bank-download-button.compact .button__text { padding-left: 12px; font-size:.72rem; }
+.bank-download-button.compact .button__icon { width: 36px; }
+
+/* ===== DESTRUCTIVE ACTION — dedicated version of supplied delete button ===== */
+.bank-delete-button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #1c1917;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,.16);
+  transition: width .3s ease, border-radius .3s ease, background-color .3s ease;
+}
+.bank-delete-button .svgIcon { width: 13px; transition: transform .3s ease, width .3s ease; }
+.bank-delete-button .svgIcon path { fill: #fff; }
+.bank-delete-button::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -22px;
+  color: #fff;
+  font-size: 2px;
+  opacity: 0;
+  transition: font-size .3s ease, transform .3s ease, opacity .3s ease;
+}
+.bank-delete-button:hover { width: 148px; border-radius: 999px; background: var(--ux-danger); }
+.bank-delete-button:hover .svgIcon { width: 42px; transform: translateY(55%); }
+.bank-delete-button:hover::before { font-size: 12px; opacity: 1; transform: translateY(30px); }
+
+/* ===== FILE UPLOAD CARD — adapted from supplied upload pattern ===== */
+.bank-upload-card {
+  min-height: 164px;
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 4px 4px 24px rgba(124,45,18,.11);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 8px;
+  background: rgba(255,237,213,.52);
+  border: 1px solid #fed7aa;
+}
+.bank-upload-card .upload-header {
+  flex: 1;
+  min-height: 104px;
+  width: 100%;
+  border: 2px dashed var(--ux-orange);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align:center;
+  padding: 16px;
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+.bank-upload-card.is-dragover .upload-header { background:#fff7ed; border-color:#9a3412; transform: scale(.99); }
+.bank-upload-card .upload-header svg { height: 40px; width: 40px; color: var(--ux-orange); stroke:currentColor; }
+.bank-upload-card .upload-header p { margin-top:7px; font-size:.78rem; font-weight:800; color:var(--ux-orange-deep); }
+.bank-upload-card .upload-header small { margin-top:3px; font-size:.68rem; color:#9a3412a8; }
+.bank-upload-card .upload-footer {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap:.55rem;
+  color:#7c2d12;
+  background:rgba(249,115,22,.12);
+  transition: background .22s ease, transform .22s ease;
+}
+.bank-upload-card .upload-footer:hover { background: rgba(249,115,22,.2); transform: translateY(-1px); }
+.bank-upload-card .upload-footer svg { width:20px; height:20px; color:var(--ux-orange); stroke:currentColor; flex:none; }
+.bank-upload-card .upload-footer p { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:.75rem; font-weight:700; }
+.bank-upload-card input[type=file] { display:none; }
+
+/* ===== FORM CONTROLS — high-impact input style adapted for operational forms ===== */
+.bank-input {
+  width:100% !important;
+  max-width:none !important;
+  min-height:48px !important;
+  padding:10px 12px !important;
+  font-size:.88rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace !important;
+  color:var(--ux-ink) !important;
+  background:#fff !important;
+  border:3px solid var(--ux-orange-deep) !important;
+  border-radius:0 !important;
+  outline:none !important;
+  box-shadow:5px 5px 0 var(--ux-orange-deep) !important;
+  transition:transform .23s ease, box-shadow .23s ease, background .23s ease, color .23s ease, border-color .23s ease !important;
+}
+textarea.bank-input { min-height:108px !important; resize:vertical; }
+select.bank-input { cursor:pointer; }
+.bank-input:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--ux-orange-deep) !important; }
+.bank-input:focus { background:var(--ux-ink) !important; color:#fff !important; border-color:#fed7aa !important; box-shadow:7px 7px 0 var(--ux-orange) !important; }
+.bank-input::placeholder { color:#a8a29e; }
+.bank-input:focus::placeholder { color:#fed7aa; }
+.bank-input.is-filled { font-weight:800; letter-spacing:.02em; }
+
+/* ===== CHECKBOX — splash checkbox recolored for Bank X ===== */
+.bank-checkbox-wrap { position:relative; width:24px; height:24px; flex:none; }
+.bank-checkbox-wrap * { box-sizing:border-box; }
+.bank-checkbox-wrap input[type=checkbox] { appearance:none; -webkit-appearance:none; width:24px; height:24px; margin:0; cursor:pointer; border:2px solid #fdba74; border-radius:50%; outline:0; background:#fff; }
+.bank-checkbox-wrap label { width:24px; height:24px; position:absolute; inset:0; border-radius:50%; pointer-events:none; }
+.bank-checkbox-wrap svg { position:absolute; top:5px; left:4px; z-index:1; pointer-events:none; width:15px; height:14px; }
+.bank-checkbox-wrap svg path { stroke:#fff; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:19; stroke-dashoffset:19; transition:stroke-dashoffset .3s ease .2s; }
+.bank-checkbox-wrap input:checked + label { animation:bankCheckboxSplash .6s ease forwards; }
+.bank-checkbox-wrap input:checked + label + svg path { stroke-dashoffset:0; }
+@keyframes bankCheckboxSplash {
+  40% { background:var(--ux-orange); box-shadow:0 -18px 0 -8px var(--ux-orange),16px -8px 0 -8px var(--ux-orange),16px 8px 0 -8px var(--ux-orange),0 18px 0 -8px var(--ux-orange),-16px 8px 0 -8px var(--ux-orange),-16px -8px 0 -8px var(--ux-orange); }
+  100% { background:var(--ux-orange); box-shadow:0 -36px 0 -10px transparent,32px -16px 0 -10px transparent,32px 16px 0 -10px transparent,0 36px 0 -10px transparent,-32px 16px 0 -10px transparent,-32px -16px 0 -10px transparent; }
+}
+
+/* page-level supportive spacing so the high-impact inputs do not overlap. */
+.form-control-block { display:block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .app-card.bank-tilt-card, .app-card.dashboard-card, .dashboard-metric-card,
+  .bank-animated-button, .primary-pill, .soft-button, .login-submit,
+  .bank-download-button, .bank-delete-button, .bank-input, .bank-upload-card * { transition:none !important; animation:none !important; }
+  .app-card.bank-tilt-card:hover, .app-card.dashboard-card:hover, .dashboard-metric-card:hover, .bank-input:hover { transform:none; }
+}
+
+@media (max-width: 640px) {
+  .app-card.bank-tilt-card:hover, .app-card.dashboard-card:hover, .dashboard-metric-card:hover { transform:translateY(-2px); }
+  .bank-download-button { width:100%; }
+}
