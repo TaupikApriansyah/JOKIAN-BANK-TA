@@ -13,6 +13,8 @@ use App\Services\ReferenceNumberService;
 use App\Services\TransactionAccountResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AdministrativeTransactionController extends Controller
@@ -43,8 +45,29 @@ class AdministrativeTransactionController extends Controller
         $proofPath = $request->hasFile('proof') ? $request->file('proof')->store("private/transaction-proofs/{$serviceCase->file_number}", 'local') : null;
         $status = $request->input('action') === 'submit' ? TransactionStatus::MenungguVerifikasi : TransactionStatus::Draft;
         $mapped = $accounts->resolve($request->string('category')->value());
-        $transaction = AdministrativeTransaction::create(['transaction_number'=>'PENDING','service_case_id'=>$serviceCase->id,'customer_id'=>$serviceCase->customer_id,'created_by'=>$request->user()->id,'category'=>$request->string('category')->value(),'payment_method'=>$request->string('payment_method')->value(),'amount'=>$request->input('amount'),'debit_account'=>$mapped['debit_account'],'credit_account'=>$mapped['credit_account'],'description'=>$request->input('description'),'proof_path'=>$proofPath,'status'=>$status,'submitted_at'=>$status===TransactionStatus::MenungguVerifikasi?now():null]);
-        $transaction->update(['transaction_number'=>$references->transactionNumber($transaction)]);
+
+        $transaction = DB::transaction(function () use ($request, $serviceCase, $references, $mapped, $proofPath, $status) {
+            $transaction = AdministrativeTransaction::create([
+                'transaction_number' => 'PENDING-'.Str::uuid(),
+                'service_case_id' => $serviceCase->id,
+                'customer_id' => $serviceCase->customer_id,
+                'created_by' => $request->user()->id,
+                'category' => $request->string('category')->value(),
+                'payment_method' => $request->string('payment_method')->value(),
+                'amount' => $request->input('amount'),
+                'debit_account' => $mapped['debit_account'],
+                'credit_account' => $mapped['credit_account'],
+                'description' => $request->input('description'),
+                'proof_path' => $proofPath,
+                'status' => $status,
+                'submitted_at' => $status === TransactionStatus::MenungguVerifikasi ? now() : null,
+            ]);
+
+            $transaction->update(['transaction_number' => $references->transactionNumber($transaction)]);
+
+            return $transaction;
+        });
+
         $audit->log($request, 'transaction', $status===TransactionStatus::Draft?'create_draft':'create_submit', $transaction, null, $this->auditValues($transaction), 'Transaksi administrasi dibuat oleh Maker.');
         return redirect()->route('cases.show', $serviceCase)->with('success', $status===TransactionStatus::Draft?'Transaksi disimpan sebagai draft.':'Transaksi berhasil diajukan dan menunggu verifikasi Admin.');
     }

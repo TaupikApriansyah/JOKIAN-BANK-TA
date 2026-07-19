@@ -44,7 +44,7 @@
 
         <div class="mt-5 divide-y divide-blue-50">
           @forelse($serviceCase->documents as $document)
-            <div class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between"><div><p class="font-medium">{{ $document->document_type }}</p><p class="text-xs text-slate-500">{{ $document->original_name }} · {{ $document->uploadedBy->name }}</p></div><div class="flex flex-wrap items-center gap-2"><x-download-button :href="route('documents.download', $document)" label="Unduh" />@if($isMaker && !$isClosed)<a href="{{ route('documents.edit', $document) }}" class="soft-button !py-2 !text-xs">Ubah</a><form method="POST" action="{{ route('documents.destroy', $document) }}" onsubmit="return confirm('Hapus dokumen ini? Dokumen wajib yang terhapus akan membuat berkas kembali belum lengkap.');" data-processing-overlay>@csrf @method('DELETE')<button class="soft-button !border-red-200 !py-2 !text-xs !text-red-600">Hapus</button></form>@endif</div></div>
+            <div class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between"><div><p class="font-medium">{{ $document->document_type }}</p><p class="text-xs text-slate-500">{{ $document->original_name }} · {{ $document->uploadedBy->name }}</p></div><div class="flex flex-wrap items-center gap-2"><x-download-button :href="route('documents.download', $document)" label="Unduh" />@if($isMaker && !$isClosed)<a href="{{ route('documents.edit', $document) }}" class="soft-button py-2! text-xs!">Ubah</a><form method="POST" action="{{ route('documents.destroy', $document) }}" onsubmit="return confirm('Hapus dokumen ini? Dokumen wajib yang terhapus akan membuat berkas kembali belum lengkap.');" data-processing-overlay>@csrf @method('DELETE')<button class="soft-button border-red-200! py-2! text-xs! text-red-600!">Hapus</button></form>@endif</div></div>
           @empty
             <p class="py-3 text-sm text-slate-500">Belum ada dokumen diarsipkan.</p>
           @endforelse
@@ -58,11 +58,36 @@
         @if($isMaker && !$isClosed)
           <form method="POST" action="{{ route('cases.transactions.store', $serviceCase) }}" enctype="multipart/form-data" class="grid gap-4 md:grid-cols-2" data-processing-overlay>
             @csrf
-            <label class="text-sm font-semibold">Kategori<select name="category" class="form-input mt-1.5" required>@foreach(array_keys(config('bank.transaction_categories')) as $category)<option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>@endforeach</select></label>
-            <label class="text-sm font-semibold">Metode Pembayaran<select name="payment_method" class="form-input mt-1.5" required><option>Setoran Tunai</option><option>Potong Saldo Rekening (Auto-debit)</option></select></label>
-            <label class="text-sm font-semibold">Nominal (Rp)<input name="amount" type="number" min="1" value="{{ old('amount') }}" required class="form-input mt-1.5"></label>
-            <div class="text-sm font-semibold">Bukti Pembayaran<x-file-upload name="proof" id="transaction-proof" label="Pilih bukti pembayaran" /></div>
-            <label class="text-sm font-semibold md:col-span-2">Keterangan<input name="description" value="{{ old('description') }}" class="form-input mt-1.5" placeholder="Keterangan transaksi (opsional)"></label>
+            <label class="text-sm font-semibold">Kategori
+              <select name="category" class="form-input mt-1.5 @error('category') border-red-400 ring-1 ring-red-200 @enderror" required>
+                <option value="" disabled @selected(old('category') === null)>Pilih kategori</option>
+                @foreach(array_keys(config('bank.transaction_categories')) as $category)
+                  <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                @endforeach
+              </select>
+              @error('category')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </label>
+            <label class="text-sm font-semibold">Metode Pembayaran
+              <select name="payment_method" class="form-input mt-1.5 @error('payment_method') border-red-400 ring-1 ring-red-200 @enderror" required>
+                <option value="" disabled @selected(old('payment_method') === null)>Pilih metode</option>
+                <option value="Setoran Tunai" @selected(old('payment_method') === 'Setoran Tunai')>Setoran Tunai</option>
+                <option value="Potong Saldo Rekening (Auto-debit)" @selected(old('payment_method') === 'Potong Saldo Rekening (Auto-debit)')>Potong Saldo Rekening (Auto-debit)</option>
+              </select>
+              @error('payment_method')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </label>
+            <label class="text-sm font-semibold">Nominal (Rp)
+              <input name="amount" type="number" min="1" value="{{ old('amount') }}" required class="form-input mt-1.5 @error('amount') border-red-400 ring-1 ring-red-200 @enderror">
+              @error('amount')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </label>
+            <div class="text-sm font-semibold">
+              Bukti Pembayaran
+              <x-file-upload name="proof" id="transaction-proof" label="Pilih bukti pembayaran" :required="false" class="mt-1.5 @error('proof') border-red-400 ring-1 ring-red-200 @enderror" />
+              @error('proof')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+            <label class="text-sm font-semibold md:col-span-2">Keterangan
+              <input name="description" value="{{ old('description') }}" class="form-input mt-1.5 @error('description') border-red-400 ring-1 ring-red-200 @enderror" placeholder="Keterangan transaksi (opsional)">
+              @error('description')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+            </label>
             <div class="flex flex-wrap justify-end gap-2 md:col-span-2"><button name="action" value="draft" class="soft-button">Simpan Draft</button><button name="action" value="submit" class="animated-button"><span>Ajukan Verifikasi</span><span></span></button></div>
           </form>
         @endif
@@ -76,10 +101,10 @@
     <section class="app-card p-5"><h2 class="font-semibold">Aksi Berkas</h2><div class="mt-4 space-y-3">
       @if($isMaker && !$isClosed)
         @if(in_array($serviceCase->status->value, ['baru','menunggu_dokumen']))<a href="{{ route('cases.edit', $serviceCase) }}" class="soft-button w-full justify-center">Ubah Data Berkas</a>@endif
-        <form method="POST" action="{{ route('cases.process', $serviceCase) }}" data-processing-overlay>@csrf<button class="soft-button w-full justify-start !border-emerald-200 !bg-emerald-50 !text-emerald-800">▶ Mulai / Lanjutkan Proses</button></form>
+        <form method="POST" action="{{ route('cases.process', $serviceCase) }}" data-processing-overlay>@csrf<button class="soft-button w-full justify-start border-emerald-200! bg-emerald-50! text-emerald-800!">▶ Mulai / Lanjutkan Proses</button></form>
         <form method="POST" action="{{ route('cases.complete', $serviceCase) }}" data-processing-overlay>@csrf<button class="animated-button w-full"><span>✓ Selesaikan & Tutup Berkas</span><span></span></button></form>
-        <form method="POST" action="{{ route('cases.reject', $serviceCase) }}" class="rounded-lg border border-red-100 bg-red-50 p-3" data-processing-overlay>@csrf<label class="block text-xs font-bold text-red-700">Alasan Penolakan<input name="reason" maxlength="500" required class="form-input mt-1 !min-h-9 !border-red-200" placeholder="Contoh: Dokumen tidak memenuhi ketentuan"></label><button class="mt-2 text-xs font-bold text-red-700">Tolak Berkas</button></form>
-        @if($canDeleteDraft)<form method="POST" action="{{ route('cases.destroy', $serviceCase) }}" onsubmit="return confirm('Hapus draft berkas ini? Tindakan hanya dapat dilakukan sebelum ada dokumen dan transaksi.');" data-processing-overlay>@csrf @method('DELETE')<button class="soft-button w-full justify-center !border-red-200 !text-red-600">Hapus Draft Kosong</button></form>@endif
+        <form method="POST" action="{{ route('cases.reject', $serviceCase) }}" class="rounded-lg border border-red-100 bg-red-50 p-3" data-processing-overlay>@csrf<label class="block text-xs font-bold text-red-700">Alasan Penolakan<input name="reason" maxlength="500" required class="form-input mt-1 min-h-9! border-red-200!" placeholder="Contoh: Dokumen tidak memenuhi ketentuan"></label><button class="mt-2 text-xs font-bold text-red-700">Tolak Berkas</button></form>
+        @if($canDeleteDraft)<form method="POST" action="{{ route('cases.destroy', $serviceCase) }}" onsubmit="return confirm('Hapus draft berkas ini? Tindakan hanya dapat dilakukan sebelum ada dokumen dan transaksi.');" data-processing-overlay>@csrf @method('DELETE')<button class="soft-button w-full justify-center border-red-200! text-red-600!">Hapus Draft Kosong</button></form>@endif
       @elseif($serviceCase->status->value === 'selesai')
         <div class="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">Berkas selesai pada {{ $serviceCase->completed_at?->format('d M Y H:i') }}.</div>
       @elseif($serviceCase->status->value === 'ditolak')
