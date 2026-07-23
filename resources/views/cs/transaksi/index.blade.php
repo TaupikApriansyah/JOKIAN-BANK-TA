@@ -55,6 +55,7 @@
 
 <x-ui.modal id="transaksi-create-modal" title="Tambah Transaksi Layanan" icon="bi-plus-circle" size="lg">
     <form method="POST" action="{{ route('cs.transaksi.store') }}" enctype="multipart/form-data">@csrf
+        <input type="hidden" name="_modal" value="transaksi-create-modal">
         @include('cs.transaksi.form', ['transaction' => null])
         <div class="form-actions"><button class="btn-save"><i class="bi bi-send-check"></i>Simpan &amp; Kirim</button><button type="button" class="btn-back" data-modal-close>Batal</button></div>
     </form>
@@ -63,6 +64,7 @@
 @foreach($transaksis->where('status_transaksi', '!=', 'Diposting') as $trx)
     <x-ui.modal id="transaksi-edit-{{ $trx->id }}" title="Edit Transaksi" icon="bi-pencil-square" size="lg">
         <form method="POST" action="{{ route('cs.transaksi.update', $trx->id) }}" enctype="multipart/form-data">@csrf @method('PUT')
+            <input type="hidden" name="_modal" value="transaksi-edit-{{ $trx->id }}">
             @include('cs.transaksi.form', ['transaction' => $trx])
             <div class="form-actions"><button class="btn-save"><i class="bi bi-save"></i>Update Transaksi</button><button type="button" class="btn-back" data-modal-close>Batal</button></div>
         </form>

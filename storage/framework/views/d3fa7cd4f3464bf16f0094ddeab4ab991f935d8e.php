@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 </head>
-<body class="app-body">
+<body class="app-body" <?php if($errors->any() && old('_modal')): ?> data-open-modal="<?php echo e(old('_modal')); ?>" <?php endif; ?>>
 <div class="app-screen app-screen--workspace">
     <div class="app-sidebar-overlay" data-sidebar-overlay></div>
     <aside class="app-sidebar" data-sidebar>
@@ -22,6 +22,7 @@
             <a href="<?php echo e(route('akuntan.dashboard')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.dashboard') ? 'is-active' : ''); ?>"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
             <a href="<?php echo e(route('akuntan.transaksi.index')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.transaksi.*') ? 'is-active' : ''); ?>"><i class="bi bi-patch-check"></i>Verifikasi Transaksi</a>
             <a href="<?php echo e(route('akuntan.akun.index')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.akun.*') ? 'is-active' : ''); ?>"><i class="bi bi-journal-bookmark"></i>Daftar Akun</a>
+            <a href="<?php echo e(route('akuntan.kas-kecil.index')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.kas-kecil.*') ? 'is-active' : ''); ?>"><i class="bi bi-wallet2"></i>Petty Cash</a>
             <a href="<?php echo e(route('akuntan.jurnal.index')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.jurnal.index') ? 'is-active' : ''); ?>"><i class="bi bi-journal-text"></i>Jurnal Umum</a>
             <a href="<?php echo e(route('akuntan.jurnal.ledger')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.jurnal.ledger') ? 'is-active' : ''); ?>"><i class="bi bi-table"></i>Buku Besar</a>
             <a href="<?php echo e(route('akuntan.laporan.index')); ?>" class="app-sidebar__link <?php echo e(request()->routeIs('akuntan.laporan.*') ? 'is-active' : ''); ?>"><i class="bi bi-file-earmark-bar-graph"></i>Laporan Akuntansi</a>

@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="app-body">
+<body class="app-body" @if($errors->any() && old('_modal')) data-open-modal="{{ old('_modal') }}" @endif>
 <div class="app-screen app-screen--workspace">
     <div class="app-sidebar-overlay" data-sidebar-overlay></div>
     <aside class="app-sidebar" data-sidebar>

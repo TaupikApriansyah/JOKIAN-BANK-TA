@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Akuntan;
 
 use App\Http\Controllers\Controller;
 use App\Models\JurnalUmum;
+use App\Models\KasKecil;
 use App\Models\TransaksiAdministrasi;
 use Carbon\Carbon;
 
@@ -12,6 +13,10 @@ class DashboardController extends Controller
     public function index()
     {
         $today = Carbon::today();
+        $kasKecilMasuk = (float) KasKecil::where('jenis', 'Masuk')->sum('nominal');
+        $kasKecilKeluar = (float) KasKecil::where('jenis', 'Keluar')->sum('nominal');
+        $saldoKasKecil = $kasKecilMasuk - $kasKecilKeluar;
+
         $pendingCount = TransaksiAdministrasi::whereIn('status_transaksi', ['Menunggu Verifikasi', 'Lunas'])->count();
         $postedToday = TransaksiAdministrasi::where('status_transaksi', 'Diposting')
             ->whereDate('tanggal_verifikasi', $today)
@@ -63,7 +68,8 @@ class DashboardController extends Controller
             'pendingTransactions',
             'latestJournals',
             'chart',
-            'chartMax'
+            'chartMax',
+            'saldoKasKecil'
         ));
     }
 }

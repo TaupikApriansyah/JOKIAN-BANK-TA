@@ -16,7 +16,8 @@
 
 <x-ui.modal id="berkas-create-modal" title="Tambah Berkas" icon="bi-folder-plus" size="lg">
 <form method="POST" action="{{ route('cs.berkas.store') }}">@csrf
-    <div class="modal-form-grid"><label class="form-group"><span class="form-label">Nasabah</span><select class="form-select" name="id_nasabah" required><option value="">Pilih nasabah</option>@foreach($nasabah as $item)<option value="{{ $item->id }}">{{ $item->nama_nasabah }} · {{ $item->nik }}</option>@endforeach</select></label><label class="form-group"><span class="form-label">Jenis Layanan</span><input class="form-control" name="jenis_layanan" placeholder="Contoh: Pembukaan Rekening" required></label><label class="form-group"><span class="form-label">Tanggal Masuk</span><input class="form-control" type="date" name="tanggal_masuk" value="{{ date('Y-m-d') }}" required></label><label class="form-group"><span class="form-label">Estimasi Selesai</span><input class="form-control" type="date" name="estimasi_selesai"></label></div>
+    <input type="hidden" name="_modal" value="berkas-create-modal">
+    <div class="modal-form-grid"><label class="form-group"><span class="form-label">Nasabah</span><select class="form-select" name="id_nasabah" required><option value="">Pilih nasabah</option>@foreach($nasabah as $item)<option value="{{ $item->id }}" @selected(old('id_nasabah') == $item->id)>{{ $item->nama_nasabah }} · {{ $item->nik }}</option>@endforeach</select></label><label class="form-group"><span class="form-label">Jenis Layanan</span><input class="form-control" name="jenis_layanan" value="{{ old('jenis_layanan') }}" placeholder="Contoh: Pembukaan Rekening" required></label><label class="form-group"><span class="form-label">Tanggal Masuk</span><input class="form-control" type="date" name="tanggal_masuk" value="{{ old('tanggal_masuk', date('Y-m-d')) }}" required></label><label class="form-group"><span class="form-label">Estimasi Selesai</span><input class="form-control" type="date" name="estimasi_selesai" value="{{ old('estimasi_selesai') }}"></label></div>
     <div class="form-actions"><button class="btn-save"><i class="bi bi-save"></i>Simpan Berkas</button><button class="btn-back" type="button" data-modal-close>Batal</button></div>
 </form>
 </x-ui.modal>
@@ -24,12 +25,14 @@
 @foreach($berkas as $item)
 <x-ui.modal id="berkas-edit-{{ $item->id }}" title="Edit Berkas" icon="bi-pencil-square" size="lg">
 <form method="POST" action="{{ route('cs.berkas.update', $item->id) }}">@csrf @method('PUT')
+    <input type="hidden" name="_modal" value="berkas-edit-{{ $item->id }}">
     <div class="modal-form-grid"><label class="form-group"><span class="form-label">Nasabah</span><select class="form-select" name="id_nasabah" required>@foreach($nasabah as $nas)<option value="{{ $nas->id }}" @selected($item->id_nasabah === $nas->id)>{{ $nas->nama_nasabah }} · {{ $nas->nik }}</option>@endforeach</select></label><label class="form-group"><span class="form-label">Jenis Layanan</span><input class="form-control" name="jenis_layanan" value="{{ $item->jenis_layanan }}" required></label><label class="form-group"><span class="form-label">Tanggal Masuk</span><input class="form-control" type="date" name="tanggal_masuk" value="{{ optional($item->tanggal_masuk)->format('Y-m-d') }}" required></label><label class="form-group"><span class="form-label">Estimasi Selesai</span><input class="form-control" type="date" name="estimasi_selesai" value="{{ optional($item->estimasi_selesai)->format('Y-m-d') }}"></label></div>
     <div class="form-actions"><button class="btn-save"><i class="bi bi-save"></i>Update Berkas</button><button class="btn-back" type="button" data-modal-close>Batal</button></div>
 </form>
 </x-ui.modal>
 <x-ui.modal id="berkas-status-{{ $item->id }}" title="Perbarui Status Berkas" icon="bi-arrow-repeat">
 <form method="POST" action="{{ route('cs.berkas.updateStatus', $item->id) }}">@csrf @method('PUT')
+    <input type="hidden" name="_modal" value="berkas-status-{{ $item->id }}">
     <label class="form-group"><span class="form-label">Status Baru</span><select class="form-select" name="status_berkas" required><option value="Diterima" @selected($item->status_berkas === 'Diterima')>Diterima</option><option value="Diproses" @selected($item->status_berkas === 'Diproses')>Diproses</option><option value="Selesai" @selected($item->status_berkas === 'Selesai')>Selesai</option></select></label><label class="form-group"><span class="form-label">Keterangan</span><textarea class="form-control" name="keterangan" rows="3" placeholder="Catatan perubahan status (opsional)"></textarea></label>
     <div class="form-actions"><button class="btn-save"><i class="bi bi-check2"></i>Simpan Status</button><button class="btn-back" type="button" data-modal-close>Batal</button></div>
 </form>

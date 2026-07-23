@@ -13,6 +13,7 @@
         <article class="metric"><div class="metric__top"><span class="metric__label">Diposting Hari Ini</span><span class="metric__icon"><i class="bi bi-journal-check"></i></span></div><b class="metric__value"><?php echo e($postedToday); ?></b><p class="metric__text">Jurnal berhasil dibentuk</p></article>
         <article class="metric"><div class="metric__top"><span class="metric__label">Pemasukan Bulan Ini</span><span class="metric__icon"><i class="bi bi-arrow-down-circle"></i></span></div><b class="metric__value metric__money">Rp <?php echo e(number_format($pemasukanBulan, 0, ',', '.')); ?></b><p class="metric__text">Transaksi sudah diposting</p></article>
         <article class="metric metric--rose"><div class="metric__top"><span class="metric__label">Pengeluaran Bulan Ini</span><span class="metric__icon"><i class="bi bi-arrow-up-circle"></i></span></div><b class="metric__value metric__money">Rp <?php echo e(number_format($pengeluaranBulan, 0, ',', '.')); ?></b><p class="metric__text">Transaksi sudah diposting</p></article>
+        <article class="metric"><div class="metric__top"><span class="metric__label">Saldo Petty Cash</span><span class="metric__icon"><i class="bi bi-wallet2"></i></span></div><b class="metric__value metric__money">Rp <?php echo e(number_format($saldoKasKecil, 0, ',', '.')); ?></b><p class="metric__text"><a href="<?php echo e(route('akuntan.kas-kecil.index')); ?>">Kelola kas kecil</a></p></article>
     </section>
 
     <section class="accounting-grid">

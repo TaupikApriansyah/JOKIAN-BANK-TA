@@ -16,6 +16,7 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `detail_jurnal`;
+DROP TABLE IF EXISTS `kas_kecil`;
 DROP TABLE IF EXISTS `jurnal_umum`;
 DROP TABLE IF EXISTS `akun_akuntansi`;
 DROP TABLE IF EXISTS `sessions`;
@@ -175,6 +176,24 @@ CREATE TABLE `transaksi_administrasi` (
   CONSTRAINT `transaksi_administrasi_diperiksa_oleh_foreign` FOREIGN KEY (`diperiksa_oleh`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `kas_kecil` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tanggal` date NOT NULL,
+  `jenis` enum('Masuk','Keluar') NOT NULL,
+  `kategori` varchar(100) NOT NULL,
+  `keterangan` varchar(255) NOT NULL,
+  `nominal` decimal(15,2) NOT NULL,
+  `nomor_bukti` varchar(100) DEFAULT NULL,
+  `created_by` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kas_kecil_tanggal_index` (`tanggal`),
+  KEY `kas_kecil_jenis_index` (`jenis`),
+  KEY `kas_kecil_created_by_foreign` (`created_by`),
+  CONSTRAINT `kas_kecil_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `akun_akuntansi` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `kode_akun` varchar(20) NOT NULL,
@@ -242,6 +261,7 @@ INSERT INTO `akun_akuntansi` (`kode_akun`, `nama_akun`, `kelompok`, `saldo_norma
 ('111', 'Kas', 'Aset', 'Debit', 'aktif', NOW(), NOW()),
 ('112', 'Bank', 'Aset', 'Debit', 'aktif', NOW(), NOW()),
 ('113', 'Piutang Administrasi', 'Aset', 'Debit', 'aktif', NOW(), NOW()),
+('114', 'Kas Kecil', 'Aset', 'Debit', 'aktif', NOW(), NOW()),
 ('411', 'Pendapatan Administrasi', 'Pendapatan', 'Kredit', 'aktif', NOW(), NOW()),
 ('412', 'Pendapatan Layanan', 'Pendapatan', 'Kredit', 'aktif', NOW(), NOW()),
 ('511', 'Beban Operasional', 'Beban', 'Debit', 'aktif', NOW(), NOW()),
@@ -272,7 +292,10 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2026_07_03_090300_create_jurnal_umum_table', 1),
 ('2026_07_03_090400_create_detail_jurnal_table', 1),
 ('2026_07_03_100000_remove_legacy_id_berkas_from_tracking_status_table', 1),
-('2026_07_03_100100_create_sessions_table', 1);
+('2026_07_03_100100_create_sessions_table', 1),
+('2026_07_23_120000_create_kas_kecil_table', 1),
+('2026_07_23_121000_backfill_initial_tracking_for_berkas', 1),
+('2026_07_23_122000_add_kas_kecil_account', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
 -- Setelah import: ubah password tiga akun demo dari menu Manajemen User sebelum sistem dipakai sungguhan.

@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ['kode_akun' => '111', 'nama_akun' => 'Kas', 'kelompok' => 'Aset', 'saldo_normal' => 'Debit'],
             ['kode_akun' => '112', 'nama_akun' => 'Bank', 'kelompok' => 'Aset', 'saldo_normal' => 'Debit'],
             ['kode_akun' => '113', 'nama_akun' => 'Piutang Administrasi', 'kelompok' => 'Aset', 'saldo_normal' => 'Debit'],
+            ['kode_akun' => '114', 'nama_akun' => 'Kas Kecil', 'kelompok' => 'Aset', 'saldo_normal' => 'Debit'],
             ['kode_akun' => '411', 'nama_akun' => 'Pendapatan Administrasi', 'kelompok' => 'Pendapatan', 'saldo_normal' => 'Kredit'],
             ['kode_akun' => '412', 'nama_akun' => 'Pendapatan Layanan', 'kelompok' => 'Pendapatan', 'saldo_normal' => 'Kredit'],
             ['kode_akun' => '511', 'nama_akun' => 'Beban Operasional', 'kelompok' => 'Beban', 'saldo_normal' => 'Debit'],

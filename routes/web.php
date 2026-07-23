@@ -11,6 +11,7 @@ use App\Http\Controllers\Akuntan\AkunController;
 use App\Http\Controllers\Akuntan\DashboardController as AkuntanDashboard;
 use App\Http\Controllers\Akuntan\JurnalController;
 use App\Http\Controllers\Akuntan\LaporanController as AkuntanLaporan;
+use App\Http\Controllers\Akuntan\KasKecilController;
 use App\Http\Controllers\Akuntan\TransaksiController as AkuntanTransaksi;
 use App\Http\Controllers\CS\ArsipDigitalController;
 use App\Http\Controllers\CS\BerkasController;
@@ -82,6 +83,11 @@ Route::middleware(['auth', 'checkrole:akuntan'])->prefix('akuntan')->name('akunt
     Route::get('/daftar-akun', [AkunController::class, 'index'])->name('akun.index');
     Route::post('/daftar-akun', [AkunController::class, 'store'])->name('akun.store');
     Route::put('/daftar-akun/{id}', [AkunController::class, 'update'])->name('akun.update');
+
+    Route::get('/kas-kecil', [KasKecilController::class, 'index'])->name('kas-kecil.index');
+    Route::post('/kas-kecil', [KasKecilController::class, 'store'])->name('kas-kecil.store');
+    Route::put('/kas-kecil/{id}', [KasKecilController::class, 'update'])->name('kas-kecil.update');
+    Route::delete('/kas-kecil/{id}', [KasKecilController::class, 'destroy'])->name('kas-kecil.destroy');
 
     Route::get('/jurnal-umum', [JurnalController::class, 'index'])->name('jurnal.index');
     Route::get('/buku-besar', [JurnalController::class, 'ledger'])->name('jurnal.ledger');
