@@ -12,7 +12,7 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             'document_type' => ['required', 'string', 'max:150'],
-            'document' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,doc,docx', 'max:10240'],
+            'document' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
         ];
     }
 }

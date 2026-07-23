@@ -15,8 +15,6 @@ use App\Services\SlaService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ServiceCaseController extends Controller
@@ -47,22 +45,9 @@ class ServiceCaseController extends Controller
 
     public function create(Request $request): View
     {
-        $customers = Customer::query()
-            ->where('assigned_to', $request->user()->id)
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
-
-        $selectedCustomerId = $request->integer('customer');
-        if ($selectedCustomerId && !$customers->contains('id', $selectedCustomerId)) {
-            // Never allow a Maker to create a case for another CS's customer.
-            $selectedCustomerId = null;
-        }
-
         return view('cases.create', [
-            'customers' => $customers,
+            'customers' => Customer::query()->where('assigned_to', $request->user()->id)->where('is_active', true)->orderBy('name')->get(),
             'serviceTypes' => ServiceType::query()->where('is_active', true)->orderBy('name')->get(),
-            'selectedCustomerId' => $selectedCustomerId,
         ]);
     }
 
@@ -74,24 +59,18 @@ class ServiceCaseController extends Controller
 
         $serviceType = ServiceType::query()->where('is_active', true)->findOrFail($request->integer('service_type_id'));
         $receivedAt = Carbon::parse($request->input('received_at'));
-
-        $serviceCase = DB::transaction(function () use ($request, $references, $customer, $serviceType, $receivedAt) {
-            $serviceCase = ServiceCase::create([
-                'file_number' => 'PENDING-'.Str::uuid(),
-                'customer_id' => $customer->id,
-                'service_type_id' => $serviceType->id,
-                'assigned_to' => $request->user()->id,
-                'created_by' => $request->user()->id,
-                'status' => CaseStatus::MenungguDokumen,
-                'received_at' => $receivedAt,
-                'due_at' => $receivedAt->copy()->addHours($serviceType->sla_hours),
-                'notes' => $request->input('notes'),
-            ]);
-
-            $serviceCase->update(['file_number' => $references->fileNumber($serviceCase)]);
-
-            return $serviceCase;
-        });
+        $serviceCase = ServiceCase::create([
+            'file_number' => 'PENDING',
+            'customer_id' => $customer->id,
+            'service_type_id' => $serviceType->id,
+            'assigned_to' => $request->user()->id,
+            'created_by' => $request->user()->id,
+            'status' => CaseStatus::MenungguDokumen,
+            'received_at' => $receivedAt,
+            'due_at' => $receivedAt->copy()->addHours($serviceType->sla_hours),
+            'notes' => $request->input('notes'),
+        ]);
+        $serviceCase->update(['file_number' => $references->fileNumber($serviceCase)]);
 
         $audit->log($request, 'service_case', 'create', $serviceCase, null, $this->auditValues($serviceCase), 'Berkas layanan dibuat oleh Maker.');
 

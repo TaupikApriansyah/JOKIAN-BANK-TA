@@ -1,52 +1,42 @@
-# CRUD dan Flow Operasional — Bank X
+# CRUD & Flow Operasional — Bank X
 
-## 1. Nasabah (CS / Maker)
+## 1. Data Nasabah
+- **Create:** CS menambahkan nasabah. Sistem memberi nomor nasabah otomatis dan mengenkripsi NIK/nomor rekening.
+- **Read:** CS hanya membaca nasabah yang ditugaskan; Admin dapat monitoring seluruh data.
+- **Update:** CS pemilik data dapat mengubah data nasabah. Nilai sensitif lama tidak dipaparkan kembali pada form.
+- **Delete aman:** Admin melakukan nonaktifkan, bukan hapus fisik. Data serta audit trail tetap ada.
 
-| Aksi | Hasil |
-|---|---|
-| Tambah | CS membuat data nasabah. Nomor nasabah dibuat otomatis dan data sensitif dienkripsi. |
-| Lihat | CS hanya melihat nasabah yang ditugaskan kepadanya; Admin dapat memonitor semua nasabah. |
-| Ubah | Hanya CS pemilik data yang dapat mengubah nasabah aktif. |
-| Hapus aman | Admin melakukan nonaktifkan, bukan hapus fisik, untuk menjaga histori berkas dan audit. |
+## 2. Berkas Layanan
+- **Create:** CS memilih nasabah dan jenis layanan; nomor berkas serta due date SLA dibuat otomatis.
+- **Read:** Detail berkas menyatukan dokumen, status SLA, transaksi, dan riwayat.
+- **Update:** Berkas hanya dapat diubah ketika status `Baru` atau `Menunggu Dokumen`.
+- **Delete aman:** Hanya berkas tanpa dokumen dan transaksi yang dapat dihapus. Bila proses sudah berjalan, gunakan `Tolak Berkas` agar histori tidak hilang.
 
-## 2. Berkas Layanan (CS / Maker)
-
-1. CS memilih **nasabah aktif** dan **jenis layanan**.
-2. Sistem membuat nomor berkas dan batas SLA berdasarkan master layanan.
-3. CS unggah dokumen wajib; status dapat berubah dari `Menunggu Dokumen` ke `Baru` setelah lengkap.
-4. CS memulai proses; status berubah menjadi `Diproses`.
-5. Bila tidak dapat dilanjutkan, CS menolak berkas dengan alasan. Bila selesai, sistem mengunci SLA sebagai `Selesai`.
-6. Draft kosong hanya boleh dihapus sebelum memiliki dokumen atau transaksi.
-
-## 3. Dokumen / Arsip (CS / Maker)
-
-- Create: unggah dokumen dari workspace berkas.
-- Read: akses mengikuti penugasan berkas.
-- Update: ubah jenis dokumen atau file sebelum berkas selesai.
-- Delete: hanya sebelum berkas selesai; aksi dicatat dalam audit trail.
-- Download: selalu dicatat ke audit trail.
+## 3. Arsip Digital
+- **Create:** CS mengunggah dokumen ke storage private.
+- **Read:** Download memakai route berotorisasi sesuai role/penugasan.
+- **Update:** Jenis dokumen atau file dapat diganti selama berkas belum selesai.
+- **Delete:** Dokumen dapat dihapus sebelum berkas selesai; aksinya masuk audit trail.
 
 ## 4. Transaksi Administrasi (Maker–Checker)
+- **Create:** CS membuat draft atau langsung submit transaksi dari berkas.
+- **Read:** CS membaca transaksi sendiri; Admin membaca seluruh transaksi.
+- **Update:** Hanya `Draft` atau `Dikembalikan` yang dapat diubah oleh pembuatnya.
+- **Delete aman:** Draft dibatalkan (`Dibatalkan`), bukan dihapus fisik.
+- **Approval:** Admin menyetujui atau mengembalikan; approval membuat jurnal otomatis dalam DB transaction.
+- **Koreksi:** Transaksi disetujui dikoreksi melalui request; Admin menyetujui/menolak. Jika disetujui, jurnal pembalik dibuat dan draft pengganti dihasilkan.
 
-1. CS membuat draft transaksi dari **workspace berkas**, sehingga ID berkas dan nasabah diisi otomatis oleh backend.
-2. CS menyimpan draft atau mengajukan verifikasi.
-3. Admin menyetujui / mengembalikan / menolak.
-4. Saat disetujui, jurnal debit–kredit dibuat otomatis dan transaksi tidak lagi dapat diedit atau dihapus langsung.
-5. Kesalahan pada transaksi approved masuk ke alur koreksi dan jurnal pembalik.
-6. Aksi delete untuk transaksi adalah **batal status**, bukan menghapus record.
+## 5. Master Layanan & User
+- Master layanan: create/read/update; delete adalah `nonaktifkan` agar berkas historis tetap valid.
+- User: create/read/update; delete adalah `nonaktifkan` karena akun serta audit log tidak boleh hilang.
 
-## 5. Keterhubungan Modul
-
+## Urutan flow
 ```text
-Nasabah
-  └─ Berkas Layanan
-      ├─ Dokumen Arsip
-      ├─ Monitoring SLA
-      └─ Transaksi Administrasi
-          └─ Persetujuan Admin → Jurnal → Rekonsiliasi → PDF/Excel
+Nasabah → Berkas → Dokumen wajib → Proses layanan
+                           │
+                           └─ SLA dipantau paralel
+
+Jika biaya ada: CS draft/submit transaksi → Admin checker
+                ├─ dikembalikan → CS perbaiki & submit ulang
+                └─ disetujui → jurnal otomatis → arsip lengkap → berkas selesai
 ```
-
-## 6. Role
-
-- **CS / Maker:** Nasabah, Berkas, Dokumen, Draft Transaksi, Pengajuan Koreksi.
-- **Admin / Checker:** Verifikasi, Master Layanan, Rekonsiliasi, Audit, User, Laporan dan Export.

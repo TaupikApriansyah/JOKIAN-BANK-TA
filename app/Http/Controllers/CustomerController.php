@@ -62,7 +62,7 @@ class CustomerController extends Controller
     public function show(Request $request, Customer $customer): View
     {
         $this->authorizeRead($request, $customer);
-        $customer->load(['assignedTo', 'serviceCases.serviceType', 'transactions.serviceCase']);
+        $customer->load(['assignedTo', 'serviceCases.serviceType', 'transactions']);
 
         return view('customers.show', compact('customer'));
     }

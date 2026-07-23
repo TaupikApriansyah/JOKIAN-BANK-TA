@@ -1,0 +1,19 @@
+@extends('layouts.app', ['pageTitle' => 'Dashboard Akuntan'])
+@section('content')
+<div class="mb-8 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+  <div><p class="text-sm font-semibold text-brand-600">Accounting Workspace</p><h2 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900">Kontrol posting dan rekonsiliasi.</h2><p class="mt-2 text-sm text-slate-400">Tinjau draft jurnal dari Checker, posting jurnal yang valid, lalu lakukan rekonsiliasi dan pelaporan.</p></div>
+  <div class="flex flex-wrap gap-3"><a href="{{ route('accountant.journals.index', ['status' => 'draft']) }}" class="soft-button"><i data-lucide="book-check" class="h-4 w-4 text-brand-600"></i> Jurnal Menunggu</a><a href="{{ route('accountant.reconciliations.index') }}" class="primary-pill"><i data-lucide="scale" class="h-4 w-4"></i> Rekonsiliasi</a></div>
+</div>
+@if($pendingJournals > 0)<div class="page-alert attention-glow mb-6 flex items-start gap-3 rounded-2xl border border-yellow-100 bg-yellow-50 p-4 text-sm text-yellow-800"><span class="rounded-lg bg-yellow-100 p-2"><i data-lucide="triangle-alert" class="h-4 w-4"></i></span><div><p class="font-extrabold">Perlu ditinjau</p><p class="mt-1">Terdapat {{ $pendingJournals }} draft jurnal yang belum diposting.</p></div></div>@endif
+<div class="mb-6 grid gap-5 md:grid-cols-4">
+  @foreach([
+    ['Draft jurnal', $pendingJournals, 'book-dashed'],
+    ['Diposting hari ini', $postedTodayCount, 'badge-check'],
+    ['Nominal bersih hari ini', 'Rp'.number_format($postedTodayTotal, 0, ',', '.'), 'banknote'],
+    ['Rekonsiliasi', $todayReconciliation ? str($todayReconciliation->status)->replace('_',' ')->title() : 'Belum dibuat', 'scale'],
+  ] as [$label,$value,$icon])
+  <div class="app-card bank-tilt-card p-5"><div class="flex items-start justify-between gap-3"><div><p class="text-xs font-bold uppercase tracking-wide text-slate-500">{{ $label }}</p><p class="mt-3 text-2xl font-extrabold text-slate-900">{{ $value }}</p></div><span class="rounded-xl bg-blue-50 p-2.5 text-brand-600"><i data-lucide="{{ $icon }}" class="h-5 w-5"></i></span></div></div>
+  @endforeach
+</div>
+<section class="table-shell"><div class="flex items-center justify-between border-b border-slate-100 px-5 py-4"><div><h3 class="font-extrabold">Jurnal terbaru</h3><p class="mt-1 text-xs text-slate-400">Urutan terbaru berdasarkan waktu pembuatan.</p></div><a href="{{ route('accountant.journals.index') }}" class="soft-button !py-2 !text-xs">Lihat Semua</a></div><div class="overflow-x-auto"><table class="min-w-full text-sm"><thead class="bg-slate-50 text-left text-xs font-bold uppercase text-slate-500"><tr><th class="px-5 py-3">Jurnal</th><th class="px-5 py-3">Transaksi / Nasabah</th><th class="px-5 py-3">Nominal</th><th class="px-5 py-3">Status</th><th class="px-5 py-3 text-right">Aksi</th></tr></thead><tbody class="divide-y divide-slate-100">@forelse($recentJournals as $journal)<tr><td class="px-5 py-4"><p class="font-mono font-bold">{{ $journal->journal_number }}</p><p class="text-xs text-slate-400">{{ $journal->entry_type === 'reversal' ? 'Jurnal pembalik' : 'Jurnal normal' }}</p></td><td class="px-5 py-4"><p class="font-semibold">{{ $journal->transaction->transaction_number }}</p><p class="text-xs text-slate-500">{{ $journal->transaction->customer->name }}</p></td><td class="px-5 py-4 font-bold">Rp{{ number_format($journal->amount,0,',','.') }}</td><td class="px-5 py-4"><span class="status-chip {{ $journal->status->value === 'posted' ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700' }}">{{ $journal->status->label() }}</span></td><td class="px-5 py-4 text-right"><a class="soft-button !py-2 !text-xs" href="{{ route('accountant.journals.show',$journal) }}">Tinjau</a></td></tr>@empty<tr><td colspan="5" class="px-5 py-10 text-center text-slate-400">Belum ada jurnal.</td></tr>@endforelse</tbody></table></div></section>
+@endsection

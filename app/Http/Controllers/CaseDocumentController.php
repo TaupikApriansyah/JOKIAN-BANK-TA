@@ -48,7 +48,7 @@ class CaseDocumentController extends Controller
     {
         $this->authorizeMaker($request, $document->serviceCase);
         abort_if($document->serviceCase->status === CaseStatus::Selesai, 422, 'Dokumen pada berkas selesai tidak dapat diubah.');
-        $validated = $request->validate(['document_type' => ['required', 'string', 'max:150'], 'document' => ['nullable', 'file', 'max:10240', 'mimes:pdf,jpg,jpeg,png,doc,docx']]);
+        $validated = $request->validate(['document_type' => ['required', 'string', 'max:150'], 'document' => ['nullable', 'file', 'max:5120', 'mimes:pdf,jpg,jpeg,png,doc,docx']]);
         $before = $this->auditValues($document);
         $data = ['document_type' => $validated['document_type']];
         if ($request->hasFile('document')) {

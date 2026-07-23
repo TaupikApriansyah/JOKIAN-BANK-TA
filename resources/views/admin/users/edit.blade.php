@@ -1,2 +1,85 @@
-@extends('layouts.app',['pageTitle'=>'Ubah Pengguna'])
-@section('content')<div class="mx-auto max-w-3xl"><div class="mb-6"><p class="font-mono text-xs font-bold text-brand-700">{{ $user->employee_id }}</p><h1 class="mt-1 text-2xl font-extrabold">Ubah Data Pengguna</h1><p class="mt-1 text-sm text-slate-500">Password dikosongkan bila tidak ingin diubah.</p></div><form method="POST" action="{{ route('admin.users.update',$user) }}" class="app-card p-6" data-processing-overlay>@csrf @method('PUT')<div class="grid gap-5 md:grid-cols-2"><label class="text-sm font-bold">ID Pegawai<input class="form-input mt-1.5" name="employee_id" value="{{ old('employee_id',$user->employee_id) }}" required></label><label class="text-sm font-bold">Nama<input class="form-input mt-1.5" name="name" value="{{ old('name',$user->name) }}" required></label><label class="text-sm font-bold">Email<input class="form-input mt-1.5" type="email" name="email" value="{{ old('email',$user->email) }}" required></label><label class="text-sm font-bold">Role<select class="form-input mt-1.5" name="role"><option value="cs" @selected(old('role',$user->role->value)==='cs')>Customer Service / Maker</option><option value="admin" @selected(old('role',$user->role->value)==='admin')>Admin / Checker</option></select></label><label class="text-sm font-bold">Password Baru<input class="form-input mt-1.5" type="password" name="password"></label><label class="text-sm font-bold">Konfirmasi Password<input class="form-input mt-1.5" type="password" name="password_confirmation"></label></div><div class="mt-6 flex justify-end gap-3"><a href="{{ route('admin.users.index') }}" class="soft-button">Batal</a><button class="animated-button"><span>Simpan Perubahan</span><span></span></button></div></form></div>@endsection
+@extends('layouts.admin')
+
+@section('title','Edit User | SIBERKAS')
+
+@section('content')
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div class="page-title">
+            <i class="bi bi-pencil-square"></i>
+            Edit User
+        </div>
+        <div class="page-subtitle">
+            Perbarui informasi pengguna sistem
+        </div>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success mb-4">
+            <i class="bi bi-check-circle-fill"></i>
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-danger mb-4">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <!-- FORM -->
+    <div class="card-form">
+        <form method="POST" action="{{ route('admin.users.update',$user->id) }}">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-4">
+                <label class="form-label">Nama</label>
+                <input type="text"
+                       name="name"
+                       value="{{ old('name',$user->name) }}"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Email</label>
+                <input type="email"
+                       name="email"
+                       value="{{ old('email',$user->email) }}"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Role</label>
+                <select name="role" class="form-select">
+                    <option value="admin"
+                        {{ old('role',$user->role)=='admin'?'selected':'' }}>
+                        Admin
+                    </option>
+                    <option value="cs"
+                        {{ old('role',$user->role)=='cs'?'selected':'' }}>
+                        CS
+                    </option>
+                </select>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn-update">
+                    <i class="bi bi-check-lg"></i>
+                    Update User
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@endsection

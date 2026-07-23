@@ -5,20 +5,19 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Preserve authorization headers for Laravel.
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+    # Do not expose hidden files or environment files from the web root.
+    RewriteRule (^|/)\. - [F,L]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Redirect trailing slash when the target is not a real directory.
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Send non-file requests to Laravel.
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
